@@ -140,7 +140,7 @@ export default function AuthForm() {
       });
 
       setTimeout(() => {
-        router.push('/my-tournaments');
+        router.push('/tournaments');
       }, 1500);
 
     } else {
@@ -267,9 +267,9 @@ const handleFileChange = (event, setFieldValue) => {
           <source src="/videos/hero-1.mp4" type="video/mp4" />
         </video>
         {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-gray-900/80 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-secondary/80 to-transparent"></div>
         <div
-          className={`absolute inset-0 bg-gradient-to-l from-gray-900/95 via-gray-900 to-transparent`}
+          className={`absolute inset-0 bg-gradient-to-l from-secondary/95 via-secondary to-transparent`}
         ></div>
       </div>
 

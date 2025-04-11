@@ -19,7 +19,7 @@ const FloatingLabelTextArea = ({
   };
 
   return (
-    <div className="relative mb-8 text-white">
+    <div className="relative  text-white">
       <div className="relative">
         <textarea
           name={name}

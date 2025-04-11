@@ -27,7 +27,7 @@ const FloatingLabelInput = ({
   };
 
   return (
-    <div className="relative mb-8 text-white">
+    <div className="relative  text-white">
       <div className="relative">
         <input
           name={name}

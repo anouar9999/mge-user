@@ -54,7 +54,7 @@ const ProfileDropdown = () => {
     localStorage.removeItem('username');
     localStorage.removeItem('userType');
     localStorage.removeItem('avatarUrl');
-    router.push('/auth/auth1/login');
+    router.push('/login');
   };
 
   if (!userName) return null;

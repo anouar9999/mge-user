@@ -6,6 +6,7 @@ import TeamSidebar from './TeamSidebar';
 import CreateTeamForm from './CreateTeamForm';
 import { IconTournament } from '@tabler/icons-react';
 import { useToast } from '@/app/components/toast/ToastProviderContext';
+import NonOwnerView from './NonOwnerView';
 
 // Constants
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -359,7 +360,7 @@ const TeamHub = () => {
                 className="fixed inset-y-0 right-0 z-50 w-full sm:max-w-md lg:max-w-lg"
               />
             ) : (
-              <TeamSidebar
+              <NonOwnerView
                 team={selectedTeam}
                 isOpen={sidebarOpen}
                 onClose={handleCloseSidebar}

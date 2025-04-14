@@ -121,6 +121,7 @@ const ParticipantTournaments = ({ participantId }) => {
               spots_remaining={tournament.spots_remaining}
               tournamentType={tournament.participation_type}
               registered_count={tournament.registered_count}
+              game={tournament.game}
             />
           ))}
         </div>

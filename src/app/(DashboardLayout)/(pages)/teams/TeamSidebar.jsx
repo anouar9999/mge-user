@@ -156,12 +156,12 @@ const RequestCard = ({ request, handleRequestAction, actionLoading, defaultAvata
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           {/* Avatar with improved styling */}
-          <div className="relative w-14 h-14 md:w-16 md:h-16 flex-shrink-0 rounded-xl overflow-hidden ring-2 ring-primary/20 hover:ring-primary/40 transition-all duration-300">
+          <div className="relative w-14 h-14 md:w-16 md:h-16 flex-shrink-0 angular-cut overflow-hidden  hover:ring-primary/40 transition-all duration-300">
             <img
               src={
-                request.avatar
+                false
                   ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${request.avatar}`
-                  : `data:image/svg+xml,${encodeURIComponent(defaultAvatarSvg)}`
+                  : `https://png.pngtree.com/png-clipart/20190903/ourmid/pngtree-vector-of-e-sports-team-logo-design-knight-armor-with-weapon-png-image_1716145.jpg`
               }
               alt={request.name}
               className="w-full h-full object-cover transition-all duration-500 hover:scale-110"
@@ -172,7 +172,7 @@ const RequestCard = ({ request, handleRequestAction, actionLoading, defaultAvata
           {/* User Info with improved typography */}
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2 md:gap-3">
-              <h4 className="text-base md:text-lg font-semibold text-white hover:text-primary transition-colors duration-300">
+              <h4 className="text-base md:text-lg font-semibold uppercase font-valorant text-white hover:text-primary transition-colors duration-300">
                 {request.name}
               </h4>
               <span className="px-2 md:px-3 py-1 bg-primary/10 text-xs font-medium text-primary/90 rounded-full border border-primary/20 animate-pulse">
@@ -189,21 +189,10 @@ const RequestCard = ({ request, handleRequestAction, actionLoading, defaultAvata
                 <Shield size={12} className="mr-1" />
                 {request.region || 'Region Unknown'}
               </span>
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="inline-flex items-center px-2 md:px-3 py-1 md:py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-xs font-medium text-blue-400 rounded-lg transition-colors duration-300"
-              >
-                <MessageCircle size={12} className="mr-1" />
-                {isExpanded ? 'Hide Message' : 'View Message'}
-              </button>
+             
             </div>
 
-            {/* Expandable message section */}
-            {isExpanded && (
-              <div className="mt-3 p-3 bg-gray-800/50 rounded-lg border border-gray-700/50 text-gray-300 text-sm">
-                {request.message || 'No message provided.'}
-              </div>
-            )}
+           
           </div>
 
           {/* Action Buttons with animation */}
@@ -211,7 +200,7 @@ const RequestCard = ({ request, handleRequestAction, actionLoading, defaultAvata
             <button
               onClick={() => handleRequestAction(request.id, 'reject')}
               disabled={actionLoading}
-              className="flex-1 sm:flex-initial px-3 md:px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 sm:flex-initial px-3 md:px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 angular-cut transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {actionLoading ? (
                 <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
@@ -223,7 +212,7 @@ const RequestCard = ({ request, handleRequestAction, actionLoading, defaultAvata
             <button
               onClick={() => handleRequestAction(request.id, 'accept')}
               disabled={actionLoading}
-              className="flex-1 sm:flex-initial px-3 md:px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-green-500/20"
+              className="flex-1 sm:flex-initial px-3 md:px-4 py-2 bg-green-500 hover:bg-green-600 text-white angular-cut transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-green-500/20"
             >
               {actionLoading ? (
                 <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin" />
@@ -262,7 +251,7 @@ const TeamSidebar = ({ isOpen, onClose, team, onTeamUpdate }) => {
     twitter: '',
   });
 
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [ showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { addToast } = useToast();
   const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [sidebarAnimation, setSidebarAnimation] = useState(false);
@@ -838,7 +827,7 @@ const TeamSidebar = ({ isOpen, onClose, team, onTeamUpdate }) => {
                     <div className="flex items-start gap-5">
                       {/* Team logo with modern frame */}
                       <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-600 to-blue-600 rotate-6 rounded-md blur-sm opacity-70"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-blue-600 rotate-6 rounded-md blur-sm opacity-70"></div>
                         <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-md overflow-hidden border-2 border-gray-700 shadow-lg transform hover:-rotate-2 transition-transform duration-300 z-10">
                           <img
                             src={
@@ -1277,7 +1266,7 @@ const TeamSidebar = ({ isOpen, onClose, team, onTeamUpdate }) => {
                               <UserPlus className="w-6 h-6 md:w-8 md:h-8" />
                             </div>
                             <div>
-                              <h3 className="text-sm font-medium text-gray-400">
+                              <h3 className="text-xl tracking-wider font-custom  text-gray-400">
                                 Pending Requests
                               </h3>
                               <p className="text-2xl md:text-3xl font-bold text-white">
@@ -1293,7 +1282,7 @@ const TeamSidebar = ({ isOpen, onClose, team, onTeamUpdate }) => {
                               <Check className="w-6 h-6 md:w-8 md:h-8" />
                             </div>
                             <div>
-                              <h3 className="text-sm font-medium text-gray-400">Accepted Today</h3>
+                              <h3 className="text-xl tracking-wider font-custom text-gray-400">Accepted Today</h3>
                               <p className="text-2xl md:text-3xl font-bold text-white">0</p>
                             </div>
                           </div>
@@ -1301,15 +1290,19 @@ const TeamSidebar = ({ isOpen, onClose, team, onTeamUpdate }) => {
                       </div>
 
                       {/* Requests List */}
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col grid-cols-2 gap-4">
                         {requests.map((request) => (
-                          <RequestCard
+                        
+                        <>
+                        <RequestCard
                             key={request.id}
                             request={request}
                             handleRequestAction={handleRequestAction}
                             actionLoading={actionLoading}
                             defaultAvatarSvg={defaultAvatarSvg}
                           />
+                        </>
+                        
                         ))}
 
                         {requests.length === 0 && (
@@ -1608,7 +1601,7 @@ const TeamSidebar = ({ isOpen, onClose, team, onTeamUpdate }) => {
 
                             <button
                               type="submit"
-                              className="group px-6 py-3 bg-gradient-to-r from-primary/70 to-purple-600/70 hover:from-primary hover:to-purple-600 angular-cut text-white flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 shadow-lg shadow-purple-500/20 relative overflow-hidden"
+                              className="group px-6 py-3 bg-primary hover:from-primary hover:to-purple-600 angular-cut text-white flex items-center justify-center gap-2 transition-all duration-300 hover:scale-105 shadow-lg shadow-purple-500/20 relative overflow-hidden"
                             >
                               <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/0 via-white/10 to-white/0 shine-effect opacity-0 group-hover:opacity-100"></span>
                               <Save size={20} className="relative z-10" />
@@ -1628,19 +1621,19 @@ const TeamSidebar = ({ isOpen, onClose, team, onTeamUpdate }) => {
 
       {/* Delete Confirmation Modal with enhanced styling */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-60 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-gradient-to-b from-gray-900 to-gray-800 rounded-2xl p-6 md:p-8 w-full max-w-md border border-gray-700 shadow-2xl shadow-red-500/5">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[99999999999999999999] flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-gradient-to-b from-gray-900 to-gray-800  p-6 md:p-8 w-full max-w-md angular-cut shadow-2xl shadow-red-500/5">
             <div className="flex items-center gap-4 mb-6">
               <div className="p-4 bg-red-500/20 rounded-xl">
                 <AlertTriangle className="w-8 h-8 text-red-400" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">Delete Team</h3>
-                <p className="text-gray-400 mt-1">This action cannot be undone.</p>
+                <h3 className="text-2xl tracking-wider font-custom text-white">Delete Team</h3>
+                <p className="text-gray-400 mt-1 font-mono">This action cannot be undone.</p>
               </div>
             </div>
 
-            <p className="text-gray-300 mb-8 bg-red-500/5 p-4 rounded-xl border border-red-500/20">
+            <p className="text-gray-300 mb-8 bg-red-500/5 p-4  border border-red-500/20">
               Are you sure you want to delete{' '}
               <span className="font-semibold text-white">{team?.name}</span>? All team data,
               including members and history, will be permanently removed.
@@ -1649,7 +1642,7 @@ const TeamSidebar = ({ isOpen, onClose, team, onTeamUpdate }) => {
             <div className="flex items-center justify-end gap-4">
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="px-5 py-3 text-gray-400 hover:text-white transition-colors"
+                className="px-5 py-3 text-gray-400 font-valorant hover:text-white transition-colors"
               >
                 Cancel
               </button>
@@ -1658,10 +1651,10 @@ const TeamSidebar = ({ isOpen, onClose, team, onTeamUpdate }) => {
                   handleDeleteTeam();
                   setShowDeleteConfirm(false);
                 }}
-                className="px-5 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-xl text-white transition-all duration-300 hover:scale-105 flex items-center gap-2 shadow-lg shadow-red-500/20"
+                className="px-5 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 angular-cut text-white transition-all duration-300 hover:scale-105 flex items-center gap-2 shadow-lg shadow-red-500/20"
               >
                 <Trash className="w-5 h-5" />
-                <span>Delete Team</span>
+                <span className='font-valorant'>Delete Team</span>
               </button>
             </div>
           </div>

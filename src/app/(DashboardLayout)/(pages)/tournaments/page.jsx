@@ -73,7 +73,7 @@ const LeagueOfLegendsProfile = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-16 w-16 sm:h-24 sm:w-24 lg:h-32 lg:w-32 border-t-2 border-b-2 border-purple-500"></div>
+        <div className="animate-spin rounded-full h-16 w-16 sm:h-24 sm:w-24 lg:h-32 lg:w-32 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -122,6 +122,7 @@ const LeagueOfLegendsProfile = () => {
               spots_remaining={tournament.spots_remaining}
               tournamentType={tournament.participation_type}
               registered_count={tournament.registered_count}
+              game={tournament.game}
             />
           ))}
         </div>

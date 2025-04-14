@@ -28,7 +28,7 @@ const Header = ({ setIsMobileOpen }) => {
   };
 
   return (
-    <header className="absolute top-0 left-0 right-0 w-full h-16 md:h-20 bg-gradient-to-b from-black to-transparent   flex items-center justify-between px-4 md:px-12 z-10">
+    <header className="fixed top-0 left-0 right-0 w-full h-16 md:h-20 bg-gradient-to-b from-black to-transparent   flex items-center justify-between px-4 md:px-12 z-50">
       <div className={`relative ${isMobile ? 'mx-auto' : ''} w-28 h-12 md:w-32 md:h-20 `}>
         <Link href={'/dashboards/tournaments'} >
         <Image

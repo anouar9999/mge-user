@@ -141,9 +141,11 @@ const Layout = ({ children }) => {
           <main className="font-pilot flex-1 flex flex-col  mt-8 mb-4">
            
 
-            <div className="sm:pl-12 md:pl-16">{children}</div>
+            <div className="sm:pl-16 md:pl-18">{children}</div>
           </main>
         </div>
+           {/* Footer section */}
+      
       </div>
 
       {/* Vote Popup */}

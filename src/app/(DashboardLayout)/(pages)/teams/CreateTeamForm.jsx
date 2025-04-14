@@ -43,10 +43,10 @@ const FORM_INITIAL_STATE = {
 // Options updated to reflect database values
 const OPTIONS = {
   games: [
-    { value: 1, label: 'Free Fire' },
-    { value: 2, label: 'Valorant' },
-    { value: 3, label: 'Fc Football' },
-    { value: 4, label: 'Street Fighter' }
+    { value: 1, label: 'Free Fire',image:'https://image.jeuxvideo.com/medias-crop-1200-675/157563/1575630098-7585-card.jpg' },
+    { value: 2, label: 'Valorant',image:'https://egamersworld.com/cdn-cgi/image/width=690,quality=75,format=webp/uploads/blog/1/17/1740786720182_1740786720182.webp' },
+    { value: 3, label: 'Fc Football',image:'https://tgs.sega.jp/assets/images/title/fc25/title_FC25.jpg' },
+    { value: 4, label: 'Street Fighter',image:'https://static.fnac-static.com/multimedia/Images/FD/Comete/171348/CCP_IMG_1200x800/2278322.jpg' }
   ],
   divisions: [
     { value: 'iron', label: 'Iron' },
@@ -74,16 +74,16 @@ const FORM_STEPS = [
 
 const FormSection = ({ title, icon: Icon, children }) => (
   <div className="p-4  text-primary">
-    <h3 className="flex items-center text-lg font-semibold font-valorant mb-6">
+    <h3 className="flex items-center text-3xl font-semibold font-valorant mb-6">
       <div className="relative flex items-center">
-        <div className="absolute left-0 w-1 h-full bg-gradient-to-b from-primary to-transparent rounded-full mr-3"></div>
         <div className="pl-3">
-          <Icon className="mr-2" size={20} />
+          {/* <Icon className="mr-2" size={20} /> */}
         </div>
       </div>
       <div className="relative px-4">
+      <div className="absolute left-0 w-1 h-full bg-gradient-to-b from-primary to-transparent rounded-full mr-3"></div>
+
         {title}
-        <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-r from-black/50 to-transparent"></div>
       </div>
     </h3>
     {children}
@@ -583,8 +583,8 @@ const CreateTeamForm = ({ isOpen, onClose, currentUser, onFinish }) => {
                   </div>
                   
                   {/* Game Name Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-3">
-                    <h3 className="text-white font-medium text-lg">{game.label}</h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex items-end p-3">
+                    <h3 className="text-white font-custom tracking-wider text-2xl">{game.label}</h3>
                   </div>
                   
                   {/* Selected indicator */}
@@ -789,7 +789,7 @@ const CreateTeamForm = ({ isOpen, onClose, currentUser, onFinish }) => {
                 type="button"
                 onClick={goToNextStep}
                 disabled={loading}
-                className="px-8 py-2.5 angular-cut bg-primary text-white hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 flex items-center gap-2 transition-all disabled:opacity-50"
+                className="px-8 py-2.5 angular-cut bg-primary text-white hover:bg-primary/70 focus:ring-2 flex items-center gap-2 transition-all disabled:opacity-50"
               >
                 {loading ? (
                   <>

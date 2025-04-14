@@ -95,7 +95,7 @@ const NonOwnerView = ({ team, isOpen, onClose, onJoinRequest }) => {
                   filter: 'brightness(0.4)'
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-gray-900/30 via-gray-900/60 to-gray-900" />
+              <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 via-secondary/60 to-secondary" />
             </div>
 
             <div className="relative px-4 md:px-8 py-6 md:py-16">
@@ -141,11 +141,11 @@ const NonOwnerView = ({ team, isOpen, onClose, onJoinRequest }) => {
                   <div className="w-full md:w-auto mt-4 md:mt-0">
                     <button
                       onClick={() => onJoinRequest(team.id)}
-                      className="group relative flex items-center w-full md:w-44 overflow-hidden bg-violet-600"
+                      className="group relative flex items-center w-full md:w-44 overflow-hidden bg-primary"
                     >
                       {/* Hidden lighter section that shows on hover */}
-                      <div className="absolute left-0 top-0 bg-primary/60 h-full w-0 
-                        transition-all duration-300 ease-out group-hover:w-12" 
+                      <div className="absolute left-0 top-0 bg-dark h-full w-0 
+                        transition-all duration-300 ease-out group-hover:w-32" 
                       />
                       
                       {/* Button content */}
@@ -178,7 +178,7 @@ const NonOwnerView = ({ team, isOpen, onClose, onJoinRequest }) => {
           </div>
 
           {/* About Section */}
-          <div className="bg-gray-900 p-6">
+          <div className=" p-6">
             <h3 className="text-white font-valorant mb-4">ABOUT THE TEAM</h3>
             <SocialLinks team={team} />
             <p className="text-gray-400 leading-relaxed">

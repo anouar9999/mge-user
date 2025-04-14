@@ -9,13 +9,14 @@ const TournamentCard = ({
   groups = "2 GROUPS",
   teams = "62 TEAMS",
   prizePool,
-  slug ,
+  slug,
   featured_image,
   spots_remaining,
   registered_count,
   maxParticipants,
   tournamentType,
-tournament
+  tournament,
+  game // Add game property to display the game badge
 }) => {
   const formatDate = (date) => {
     const dateObj = new Date(date);
@@ -26,6 +27,7 @@ tournament
     const minute = dateObj.getMinutes().toString().padStart(2, '0');
     return `${month}.${day}.${year} - ${hour}:${minute} PM`;
   };
+  
   const getStatusBadge = () => {
     if (registered_count >= maxParticipants) {
       return { text: "FULL", color: "bg-red-500" };
@@ -42,15 +44,33 @@ tournament
     return { text: "OPEN", color: "bg-green-500" };
   };
 
+  // Function to determine game badge color based on game name
+  const getGameBadgeColor = () => {
+    const gameColors = {
+      'VALORANT': 'bg-red-600',
+      'LEAGUE OF LEGENDS': 'bg-blue-600',
+      'CSGO': 'bg-yellow-600',
+      'CS2': 'bg-yellow-600',
+      'APEX LEGENDS': 'bg-red-700',
+      'DOTA 2': 'bg-green-700',
+      'FORTNITE': 'bg-purple-600',
+      'COD': 'bg-gray-700',
+      'OVERWATCH': 'bg-orange-500',
+      'ROCKET LEAGUE': 'bg-blue-500'
+    };
+    
+    return gameColors[game] || 'bg-indigo-600'; // Default color if game not in list
+  };
+
   const status = getStatusBadge();
-  console.log(tournament)
+  const gameBadgeColor = getGameBadgeColor();
 
   return (
     <Link href={`/${slug}`} className="block w-full font-pilot">
       <div className="w-full h-64 sm:h-72 md:h-80 relative overflow-hidden bg-[#040714] group">
         {/* Background image with grayscale effect */}
         <div 
-          className="absolute inset-0 transition-all duration-500 filter  group-hover:grayscale-0"
+          className="absolute inset-0 transition-all duration-500 filter group-hover:grayscale-0"
           style={{
             backgroundImage: `url(${process.env.NEXT_PUBLIC_BACKEND_URL}${featured_image})`,
             backgroundSize: 'cover',
@@ -66,15 +86,37 @@ tournament
         
         {/* Content */}
         <div className="relative h-full p-4 sm:p-5 md:p-6 flex flex-col justify-between z-20">
-          {/* Top section */}
+          {/* Top section with flex layout to position game badge on right */}
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-              <h2 className="text-[#647693] font-valorant text-lg sm:text-xl font-light group-hover:text-white line-clamp-2 sm:line-clamp-1">{name}</h2>
-              <span className={`${status.color} text-xs px-3 py-1 rounded font-valorant text-white w-fit`}>
-                {status.text}
-              </span>
+            <div className="flex justify-between items-start mb-2">
+              <div className="flex-1">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                  <h2 className="text-[#647693] font-valorant text-lg sm:text-xl font-light group-hover:text-white line-clamp-2 sm:line-clamp-1">{name}</h2>
+                  <span className={`${status.color} text-xs px-3 py-1 rounded font-valorant text-white w-fit`}>
+                    {status.text}
+                  </span>
+                </div>
+                <p className="text-white group-hover:text-[#647693] font-semibold text-sm">{formatDate(startDate)}</p>
+              </div>
+              
+              {/* Game Badge - Positioned on the right */}
+              {game && (
+                <div className="">
+                  <span 
+                    className="text-xs px-3 py-1  font-valorant text-white w-fit inline-block relative overflow-hidden"
+                    style={{
+                      backgroundImage: `url(${game.image})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      textShadow: '0px 0px 4px rgba(0,0,0,0.8)'
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-black opacity-40"></div>
+                    <span className="relative z-10">{game.name}</span>
+                  </span>
+                </div>
+              )}
             </div>
-            <p className="text-white group-hover:text-[#647693] font-semibold text-sm">{formatDate(startDate)}</p>
           </div>
 
           {/* Bottom section with stats and button */}

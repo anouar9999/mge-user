@@ -148,54 +148,55 @@ const TeamHub = () => {
     refreshTeams();
   }, [refreshTeams]);
 
-  const handleJoinTeamRequest = async (teamId) => {
-    if (!userId) {
-      addToast({
-        type: 'error',
-        message: 'Please login to join a team',
-        duration: 5000,
-        position: 'bottom-right'
-      });
-      return;
+ // Example of how to properly make the fetch request from your Next.js frontend
+
+const handleJoinTeamRequest = async (teamId) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/team_api.php?endpoint=join-request`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        team_id: teamId,
+        user_id: userId, // Make sure this variable is defined
+        role: 'Mid', // You can make this dynamic based on user selection
+          rank: 'Unranked', // You can make this dynamic based on user's actual rank
+    
+      }),
+      mode: 'cors', // Explicitly set CORS mode
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to send join request');
     }
 
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/team_api.php?endpoint=join-request`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          team_id: teamId,
-          user_id: userId,
-          role: 'Mid', // You can make this dynamic based on user selection
-          rank: 'Unranked', // You can make this dynamic based on user's actual rank
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        addToast({
-          type: 'success',
-          message: 'Join request sent successfully!',
-          duration: 5000,
-          position: 'bottom-right',
-        });
-        setSidebarOpen(false);
-      } else {
-        throw new Error(data.message || 'Failed to send join request');
-      }
-    } catch (error) {
-      console.error('Error sending join request:', error);
+    const data = await response.json();
+    
+    if (data.success) {
+      // Show success message
       addToast({
-        type: 'error',
-        message: error.message,
+        type: 'success',
+        message: 'Join request sent successfully!',
         duration: 5000,
         position: 'bottom-right',
       });
+      // Update UI or state as needed
+    } else {
+      throw new Error(data.message || 'Failed to send join request');
     }
-  };
+  } catch (error) {
+    console.error('Error sending join request:', error);
+    // Show error message
+    addToast({
+      type: 'error',
+      message: `Error: ${error.message}`,
+      duration: 5000,
+      position: 'bottom-right',
+    });
+  }
+};
 
   const isInMyTeams = useCallback((team) => {
     return myTeams.some((myTeam) => myTeam.id === team.id);

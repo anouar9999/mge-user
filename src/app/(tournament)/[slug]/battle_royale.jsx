@@ -15,6 +15,125 @@ import {
 import { Plus, Search, Trophy, X } from 'lucide-react';
 import axios from 'axios';
 
+// Fake data for development and testing
+const FAKE_DATA = {
+  teams: [
+    {
+      team_id: 1,
+      team_name: "Apex Predators",
+      matches_played: 5,
+      total_kills: 42,
+      total_placement_points: 35,
+      total_points: 77,
+      team_image: "/images/teams/team1.jpg"
+    },
+    {
+      team_id: 2,
+      team_name: "Shadow Wolves",
+      matches_played: 5,
+      total_kills: 38,
+      total_placement_points: 30,
+      total_points: 68,
+      team_image: "/images/teams/team2.jpg"
+    },
+    {
+      team_id: 3,
+      team_name: "Phoenix Rising",
+      matches_played: 5,
+      total_kills: 35,
+      total_placement_points: 28,
+      total_points: 63,
+      team_image: "/images/teams/team3.jpg"
+    },
+    {
+      team_id: 4,
+      team_name: "Midnight Raiders",
+      matches_played: 5,
+      total_kills: 30,
+      total_placement_points: 25,
+      total_points: 55,
+      team_image: "/images/teams/team4.jpg"
+    },
+    {
+      team_id: 5,
+      team_name: "Viper Squad",
+      matches_played: 5,
+      total_kills: 28,
+      total_placement_points: 22,
+      total_points: 50,
+      team_image: "/images/teams/team5.jpg"
+    },
+    {
+      team_id: 6,
+      team_name: "Crimson Elite",
+      matches_played: 5,
+      total_kills: 25,
+      total_placement_points: 20,
+      total_points: 45,
+      team_image: "/images/teams/team6.jpg"
+    },
+    {
+      team_id: 7,
+      team_name: "Omega Force",
+      matches_played: 5,
+      total_kills: 22,
+      total_placement_points: 18,
+      total_points: 40,
+      team_image: "/images/teams/team7.jpg"
+    },
+    {
+      team_id: 8,
+      team_name: "Stealth Assassins",
+      matches_played: 5,
+      total_kills: 20,
+      total_placement_points: 15,
+      total_points: 35,
+      team_image: "/images/teams/team8.jpg"
+    },
+    {
+      team_id: 9,
+      team_name: "Thunder Legion",
+      matches_played: 5,
+      total_kills: 18,
+      total_placement_points: 12,
+      total_points: 30,
+      team_image: "/images/teams/team9.jpg"
+    },
+    {
+      team_id: 10,
+      team_name: "Frost Giants",
+      matches_played: 5,
+      total_kills: 15,
+      total_placement_points: 10,
+      total_points: 25,
+      team_image: "/images/teams/team10.jpg"
+    }
+  ],
+  tournament: {
+    id: 123,
+    name: "Battle Royale Championship 2023",
+    description: "The ultimate test of skill and strategy",
+    start_date: "2023-10-15",
+    end_date: "2023-10-20",
+    status: "active"
+  },
+  settings: {
+    kill_points: 1,
+    placement_points: {
+      1: 12,
+      2: 9,
+      3: 7,
+      4: 5,
+      5: 4,
+      6: 3,
+      7: 2,
+      8: 1
+    },
+    max_teams: 20,
+    matches_per_day: 5
+  }
+};
+
 const BattleRoyale = ({ tournamentId }) => {
 
   // State variables
@@ -44,6 +163,22 @@ const BattleRoyale = ({ tournamentId }) => {
     const fetchLeaderboardData = async () => {
       try {
         setLoading(true);
+        
+        // For development, use fake data instead of API call
+        const useFakeData = true; // Toggle this for testing
+        
+        if (useFakeData) {
+          // Simulate API delay
+          setTimeout(() => {
+            setTeams(FAKE_DATA.teams);
+            setTournamentInfo(FAKE_DATA.tournament);
+            setSettings(FAKE_DATA.settings);
+            setLoading(false);
+          }, 1000);
+          return;
+        }
+        
+        // Real API call for production
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
         const response = await axios.get(`${backendUrl}/api/get_battle_royale_leaderboard.php?tournament_id=${tournamentId}`);
 
@@ -69,6 +204,7 @@ const BattleRoyale = ({ tournamentId }) => {
       setLoading(false);
     }
   }, [tournamentId]);
+
   const handleUpdateTeam = async () => {
     try {
       // Convert string values to integers before updating
@@ -79,8 +215,7 @@ const BattleRoyale = ({ tournamentId }) => {
         total_points: parseInt(editingTeam.total_kills || 0) + parseInt(editingTeam.total_placement_points || 0)
       };
 
-      // You would normally send this to the backend for persistence
-      // For now, we'll just update the state locally
+      // For development, just update the state locally
       setTeams(prevTeams =>
         prevTeams.map(team =>
           team.team_id === updatedTeam.team_id ? updatedTeam : team
@@ -217,7 +352,13 @@ const BattleRoyale = ({ tournamentId }) => {
         </div>
 
         {/* Admin toggle button */}
-
+        <button 
+          onClick={() => setIsAdminModalOpen(true)}
+          className="bg-primary text-white py-2 px-4 angular-cut hover:bg-primary/90 transition-all duration-300 flex items-center"
+        >
+          <FaEdit className="mr-2" />
+          Manage Leaderboard
+        </button>
       </div>
     </div>
   );

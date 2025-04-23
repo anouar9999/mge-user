@@ -575,7 +575,7 @@ const ImageCardGrid = () => {
           <div className="text-[#647693] mb-4 text-5xl">🔍</div>
           <h3 className="text-xl font-valorant text-white mb-2">Aucun résultat trouvé</h3>
           <p className="text-[#647693] max-w-md">
-            Aucun tournoi ne correspond à votre recherche. Essayez d'autres mots-clés ou catégories.
+            Aucun tournoi ne correspond à votre recherche. Essayez d autres mots-clés ou catégories.
           </p>
         </div>
       )}

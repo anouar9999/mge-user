@@ -613,7 +613,7 @@ const MultiGroupRoundRobinTournament = ({ tournamentId }) => {
           );
         }
         
-        return <PlayoffsBracket bracketData={playoffData.bracket} />;
+        // return <PlayoffsBracket bracketData={playoffData.bracket} />;
       default:
         return <GroupsOverview groups={groups} />;
     }

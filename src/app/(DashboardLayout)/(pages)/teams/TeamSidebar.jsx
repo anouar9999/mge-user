@@ -159,7 +159,7 @@ const RequestCard = ({ request, handleRequestAction, actionLoading, defaultAvata
           <div className="relative w-14 h-14 md:w-16 md:h-16 flex-shrink-0 angular-cut overflow-hidden  hover:ring-primary/40 transition-all duration-300">
             <img
               src={
-                false
+                true
                   ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${request.avatar}`
                   : `https://png.pngtree.com/png-clipart/20190903/ourmid/pngtree-vector-of-e-sports-team-logo-design-knight-armor-with-weapon-png-image_1716145.jpg`
               }

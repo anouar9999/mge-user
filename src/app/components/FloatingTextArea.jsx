@@ -8,7 +8,7 @@ const FloatingLabelTextArea = ({
   error,
   placeholder,
   onBlur,
-  rows = 4
+  rows 
 }) => {
   const [isFocused, setIsFocused] = useState(true);
 

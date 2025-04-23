@@ -10,7 +10,8 @@ const FloatingLabelInput = ({
   name,
   error,
   placeholder,
-  onBlur
+  onBlur,
+  classNames
 }) => {
   const [isFocused, setIsFocused] = useState(true);
   const [showPassword, setShowPassword] = useState(true);
@@ -37,6 +38,7 @@ const FloatingLabelInput = ({
           onChange={onChange}
           onFocus={handleFocus}   
           className={`
+            ${classNames}
             w-full 
             bg-dark
             angular-cut

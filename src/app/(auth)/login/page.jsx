@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import FloatingLabelInput from '@/app/components/input/FloatingInput';
 import ServerMessage from './ServerMessage';
+import FloatingLabelTextArea from '@/app/components/FloatingTextArea';
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
@@ -37,14 +38,13 @@ export default function AuthForm() {
       .max(50, 'Too long')
       .matches(/^[a-zA-Z0-9_]+$/, 'Letters, numbers, underscores only')
       .required('Required'),
-    email: Yup.string().email('Invalid email').required('Required'),
     password: Yup.string()
       .min(8, 'Min 8 characters')
       .matches(/[a-z]/, '1 lowercase')
       .matches(/[A-Z]/, '1 uppercase')
       .matches(/[0-9]/, '1 number')
       .matches(/[^a-zA-Z0-9]/, '1 special character')
-      .required('Required'),
+      ,
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password')], 'Passwords must match')
       .required('Required'),
@@ -66,14 +66,14 @@ export default function AuthForm() {
       };
 
   const inputClasses = ` w-full 
-            bg-gray-800 
+            bg-dark
             text-white 
             rounded-xl 
             text-sm 
             text-[10pt] 
             px-6 
             py-3 
-            mb-4
+            
             focus:outline-none 
             focus:ring-2 
             focus:ring-black/20 
@@ -367,6 +367,8 @@ const handleFileChange = (event, setFieldValue) => {
                       onBlur={handleBlur}
                       error={touched.email && errors.email}
                       placeholder="Enter your email"
+                      
+
                     />
 
                     <FloatingLabelInput
@@ -417,7 +419,7 @@ const handleFileChange = (event, setFieldValue) => {
     {/* File Input */}
     <div className="relative flex-grow w-full">
       <label
-        className="absolute transition-all text-[12pt] font-custom leading-tight tracking-widest duration-200 pointer-events-none -translate-y-9 top-5 left-4 text-xs rounded-md text-gray-400 bg-gray-800 px-2"
+        className="absolute transition-all text-[12pt] font-custom leading-tight tracking-widest duration-200 pointer-events-none -translate-y-9 top-5 left-4 text-xs rounded-md text-gray-400 bg-dark px-2"
       >
         Profile Picture
       </label>
@@ -426,8 +428,9 @@ const handleFileChange = (event, setFieldValue) => {
         name="avatar"
         onChange={(event) => handleFileChange(event, setFieldValue)}
         accept="image/jpeg,image/png,image/gif"
-        className={`${inputWithIconClasses} file:mr-4 file:py-2 file:px-4 
-          file:rounded-full file:border-0 file:text-sm file:bg-gray-700 
+        className={`${inputWithIconClasses} file:mr-4 file:py-2 file:px-4      
+
+          file:rounded-full file:border-0 file:text-sm file:bg-secondary 
           file:text-gray-300 hover:file:bg-gray-600 cursor-pointer`}
       />
     </div>
@@ -446,23 +449,10 @@ const handleFileChange = (event, setFieldValue) => {
         onBlur={handleBlur}
         error={touched.username && errors.username}
         placeholder="Choose a username"
-      />
+        classNames={'mb-8'}
 
-      <FloatingLabelInput
-        label="Email"
-        type="email"
-        icon={MailIcon}
-        name="email"
-        value={values.email}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.email && errors.email}
-        placeholder="Enter your email"
       />
-    </div>
-
-    <div className="space-y-6 lg:space-y-0">
-      <FloatingLabelInput
+ <FloatingLabelInput
         label="Password"
         type="password"
         icon={LockIcon}
@@ -472,8 +462,26 @@ const handleFileChange = (event, setFieldValue) => {
         onBlur={handleBlur}
         error={touched.password && errors.password}
         placeholder="Create a strong password"
+        
       />
 
+     
+    </div>
+
+    <div className="space-y-6 lg:space-y-0">
+    <FloatingLabelInput
+        label="Email"
+        type="email"
+        icon={MailIcon}
+        name="email"
+        value={values.email}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.email && errors.email}
+        placeholder="Enter your email"
+        classNames={'mb-8'}
+      />
+     
       <FloatingLabelInput
         label="Confirm Password"
         type="password"
@@ -489,11 +497,12 @@ const handleFileChange = (event, setFieldValue) => {
 
     {/* Bio Section */}
     <div className="lg:col-span-2">
-      <FloatingLabelInput
+      <FloatingLabelTextArea
         label="Bio"
         type="textarea"
         icon={FileTextIcon}
         name="bio"
+      row={2}
         value={values.bio}
         onChange={handleChange}
         onBlur={handleBlur}

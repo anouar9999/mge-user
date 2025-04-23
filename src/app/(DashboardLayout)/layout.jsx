@@ -114,13 +114,13 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className="relative flex flex-col min-h-screen bg-black overflow-x-hidden">
+    <div className="relative flex flex-col min-h-screen bg-secondary overflow-x-hidden">
       {/* Background and Overlay Container */}
       <div className="fixed top-0 left-0 right-0 h-screen w-full z-0">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="https://wallpaper.forfun.com/fetch/90/90bcf5ee927d2ac4487970ebb937bef2.jpeg"
+            src="https://curry.gg/images/bg_left.webp"
             alt="Background"
             fill
             style={{ objectFit: 'cover' }}
@@ -130,7 +130,7 @@ const Layout = ({ children }) => {
         </div>
 
         {/* Dark Overlay with Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-secondary/95 via-secondary/95 to-secondary"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary/5 via-secondary/5 to-secondary"></div>
       </div>
 
       {/* Content */}

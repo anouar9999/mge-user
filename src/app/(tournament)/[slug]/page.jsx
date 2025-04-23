@@ -137,7 +137,7 @@ const TabComponent = ({ activeTab, onTabChange, tournament }) => {
                                   <img
                                   className='rounded-lg'
                                     width={'50px'}
-                                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${tournament.game_image}`}
+                                    src={`${tournament.game_image}`}
                                   />
                                 }
                                 value={tournament.game_name}
@@ -167,14 +167,14 @@ const TabComponent = ({ activeTab, onTabChange, tournament }) => {
       case 'Participants':
         return <ParticipantCardGrid tournamentId={tournament.id} />;
       case 'Bracket':
-        if (tournament.format_des_qualifications === 'Single Elimination') {
+        if (tournament.bracket_type === 'Single Elimination') {
           return <SingleTournament />;
-        } else if (tournament.format_des_qualifications === 'Double Elimination') {
+        } else if (tournament.bracket_type === 'Double Elimination') {
           return <DoubleTournament />;
-        } else if (tournament.format_des_qualifications === 'Battle Royale') {
-          return <BattleRoyale />;
+        } else if (tournament.bracket_type === 'Battle Royale') {
+          return <BattleRoyale  tournamentId={tournament.id} />;
         } else {
-          return <RoundRobinTournament />;
+          return <RoundRobinTournament tournamentId={tournament.id}/>;
         }
       default:
         return <p className="text-center text-gray-400">Content for {activeTab}</p>;

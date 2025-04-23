@@ -1,306 +1,580 @@
-import React, { useState } from 'react';
-import { Trophy, Medal, Target, Shield, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { TbTournament } from 'react-icons/tb';
+import { FaTrophy, FaChartBar, FaUserFriends, FaInfoCircle, FaMedal, FaCalendarAlt, FaFilter, FaFire, FaSkull, FaEquals, FaSpinner } from 'react-icons/fa';
+// import PlayoffsBracket from './components/brackets/PlayoffsBracket';
+import axios from 'axios';
 
-const RoundRobinTournament = () => {
-  // Sample teams for the tournament (using 8 teams for a balanced round robin)
-  const [teams] = useState([
-    { 
-      id: 1, 
-      name: "WINNERS ESPORTS", 
-      played: 7, 
-      wins: 6, 
-      draws: 1, 
-      losses: 0, 
-      goalsFor: 18, 
-      goalsAgainst: 5,
-      form: ['W', 'W', 'D', 'W', 'W', 'W', 'W'] 
-    },
-    { 
-      id: 2, 
-      name: "JOKO FORCE", 
-      played: 7, 
-      wins: 5, 
-      draws: 1, 
-      losses: 1, 
-      goalsFor: 15, 
-      goalsAgainst: 7,
-      form: ['W', 'W', 'W', 'L', 'W', 'D', 'W'] 
-    },
-    { 
-      id: 3, 
-      name: "TOXIC TX", 
-      played: 7, 
-      wins: 5, 
-      draws: 0, 
-      losses: 2, 
-      goalsFor: 14, 
-      goalsAgainst: 8,
-      form: ['W', 'W', 'L', 'W', 'W', 'W', 'L'] 
-    },
-    { 
-      id: 4, 
-      name: "Tyranids", 
-      played: 7, 
-      wins: 4, 
-      draws: 1, 
-      losses: 2, 
-      goalsFor: 12, 
-      goalsAgainst: 9,
-      form: ['W', 'L', 'W', 'D', 'W', 'W', 'L'] 
-    },
-    { 
-      id: 5, 
-      name: "Amateras", 
-      played: 7, 
-      wins: 3, 
-      draws: 1, 
-      losses: 3, 
-      goalsFor: 10, 
-      goalsAgainst: 10,
-      form: ['D', 'W', 'L', 'W', 'L', 'L', 'W'] 
-    },
-    { 
-      id: 6, 
-      name: "FANTASMAjr", 
-      played: 7, 
-      wins: 2, 
-      draws: 1, 
-      losses: 4, 
-      goalsFor: 8, 
-      goalsAgainst: 12,
-      form: ['L', 'L', 'W', 'D', 'W', 'L', 'L'] 
-    },
-    { 
-      id: 7, 
-      name: "Old School", 
-      played: 7, 
-      wins: 1, 
-      draws: 1, 
-      losses: 5, 
-      goalsFor: 6, 
-      goalsAgainst: 15,
-      form: ['L', 'D', 'L', 'L', 'L', 'L', 'W'] 
-    },
-    { 
-      id: 8, 
-      name: "TripleX.Team", 
-      played: 7, 
-      wins: 0, 
-      draws: 0, 
-      losses: 7, 
-      goalsFor: 4, 
-      goalsAgainst: 21,
-      form: ['L', 'L', 'L', 'L', 'L', 'L', 'L'] 
-    }
-  ]);
+// API base URL - replace with your actual API base URL
 
-  // Match schedule and results
-  const [rounds] = useState([
-    {
-      name: "Round 1",
-      matches: [
-        { homeTeam: "WINNERS ESPORTS", homeScore: 3, awayTeam: "TripleX.Team", awayScore: 0, completed: true },
-        { homeTeam: "JOKO FORCE", homeScore: 2, awayTeam: "Old School", awayScore: 0, completed: true },
-        { homeTeam: "TOXIC TX", homeScore: 2, awayTeam: "FANTASMAjr", awayScore: 1, completed: true },
-        { homeTeam: "Tyranids", homeScore: 1, awayTeam: "Amateras", awayScore: 1, completed: true }
-      ]
-    },
-    {
-      name: "Round 2",
-      matches: [
-        { homeTeam: "WINNERS ESPORTS", homeScore: 2, awayTeam: "Old School", awayScore: 0, completed: true },
-        { homeTeam: "JOKO FORCE", homeScore: 3, awayTeam: "TripleX.Team", awayScore: 1, completed: true },
-        { homeTeam: "TOXIC TX", homeScore: 3, awayTeam: "Tyranids", awayScore: 1, completed: true },
-        { homeTeam: "FANTASMAjr", homeScore: 1, awayTeam: "Amateras", awayScore: 2, completed: true }
-      ]
-    },
-    {
-      name: "Round 3",
-      matches: [
-        { homeTeam: "WINNERS ESPORTS", homeScore: 2, awayTeam: "JOKO FORCE", awayScore: 2, completed: true },
-        { homeTeam: "TOXIC TX", homeScore: 1, awayTeam: "Amateras", awayScore: 2, completed: true },
-        { homeTeam: "Tyranids", homeScore: 2, awayTeam: "TripleX.Team", awayScore: 0, completed: true },
-        { homeTeam: "FANTASMAjr", homeScore: 2, awayTeam: "Old School", awayScore: 1, completed: true }
-      ]
-    },
-    {
-      name: "Round 4",
-      matches: [
-        { homeTeam: "WINNERS ESPORTS", homeScore: 3, awayTeam: "FANTASMAjr", awayScore: 1, completed: true },
-        { homeTeam: "JOKO FORCE", homeScore: 1, awayTeam: "TOXIC TX", awayScore: 2, completed: true },
-        { homeTeam: "Tyranids", homeScore: 1, awayTeam: "Old School", awayScore: 0, completed: true },
-        { homeTeam: "Amateras", homeScore: 2, awayTeam: "TripleX.Team", awayScore: 0, completed: true }
-      ]
-    },
-    {
-      name: "Round 5",
-      matches: [
-        { homeTeam: "WINNERS ESPORTS", homeScore: 2, awayTeam: "Tyranids", awayScore: 1, completed: true },
-        { homeTeam: "JOKO FORCE", homeScore: 3, awayTeam: "Amateras", awayScore: 1, completed: true },
-        { homeTeam: "TOXIC TX", homeScore: 2, awayTeam: "Old School", awayScore: 1, completed: true },
-        { homeTeam: "FANTASMAjr", homeScore: 0, awayTeam: "TripleX.Team", awayScore: 0, completed: true }
-      ]
-    },
-    {
-      name: "Round 6",
-      matches: [
-        { homeTeam: "WINNERS ESPORTS", homeScore: 3, awayTeam: "TOXIC TX", awayScore: 1, completed: true },
-        { homeTeam: "JOKO FORCE", homeScore: 2, awayTeam: "FANTASMAjr", awayScore: 2, completed: true },
-        { homeTeam: "Tyranids", homeScore: 3, awayTeam: "TripleX.Team", awayScore: 1, completed: true },
-        { homeTeam: "Amateras", homeScore: 1, awayTeam: "Old School", awayScore: 2, completed: true }
-      ]
-    },
-    {
-      name: "Round 7",
-      matches: [
-        { homeTeam: "WINNERS ESPORTS", homeScore: 3, awayTeam: "Amateras", awayScore: 0, completed: true },
-        { homeTeam: "JOKO FORCE", homeScore: 4, awayTeam: "Tyranids", awayScore: 2, completed: true },
-        { homeTeam: "TOXIC TX", homeScore: 1, awayTeam: "TripleX.Team", awayScore: 2, completed: true },
-        { homeTeam: "FANTASMAjr", homeScore: 0, awayTeam: "Old School", awayScore: 1, completed: true }
-      ]
-    }
-  ]);
 
-  const [activeRound, setActiveRound] = useState(6); // Start with the most recent round
+const MultiGroupRoundRobinTournament = ({ tournamentId }) => {
+  const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState(0);
+  const [activeTab, setActiveTab] = useState('groups');
+  const [currentRound, setCurrentRound] = useState(0);
+  
+  // Loading and error states
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Tournament data
+  const [tournamentData, setTournamentData] = useState(null);
 
-  // Sort teams by points (3 for win, 1 for draw), then goal difference, then goals scored
-  const sortedTeams = [...teams].sort((a, b) => {
-    const pointsA = a.wins * 3 + a.draws;
-    const pointsB = b.wins * 3 + b.draws;
-    
-    if (pointsB !== pointsA) {
-      return pointsB - pointsA;
+  // Modal states
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalGroupIndex, setModalGroupIndex] = useState(null);
+
+  // State for match results
+  const [matchResults, setMatchResults] = useState([]);
+  
+  // State for playoffs
+  const [playoffData, setPlayoffData] = useState(null);
+  const [playoffLoading, setPlayoffLoading] = useState(false);
+
+  // Fetch tournament data on component mount
+  useEffect(() => {
+    if (!tournamentId) {
+      setError('Tournament ID is required');
+      setLoading(false);
+      return;
     }
     
-    const goalDiffA = a.goalsFor - a.goalsAgainst;
-    const goalDiffB = b.goalsFor - b.goalsAgainst;
+    fetchTournamentGroups();
+  }, [tournamentId]);
+
+  // Function to fetch tournament groups and matches
+  const fetchTournamentGroups = async () => {
+    setLoading(true);
+    setError(null);
     
-    if (goalDiffB !== goalDiffA) {
-      return goalDiffB - goalDiffA;
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/get_tournament_groups.php?tournament_id=${tournamentId}`);
+      
+      if (response.data.success) {
+        setTournamentData(response.data.data.tournament);
+        
+        if (response.data.data.groups && response.data.data.groups.length > 0) {
+          setGroups(response.data.data.groups);
+          
+          // Extract match results
+          const results = [];
+          response.data.data.groups.forEach(group => {
+            Object.entries(group.matches).forEach(([roundIndex, roundMatches]) => {
+              roundMatches.forEach((match, matchIndex) => {
+                if (match.team1_score !== null && match.team2_score !== null) {
+                  results.push({
+                    groupId: group.id,
+                    round: parseInt(roundIndex),
+                    matchIndex: matchIndex,
+                    team1Score: match.team1_score,
+                    team2Score: match.team2_score
+                  });
+                }
+              });
+            });
+          });
+          
+          setMatchResults(results);
+        }
+      } else {
+        throw new Error(response.data.message || 'Failed to fetch tournament data');
+      }
+    } catch (error) {
+      console.error('Error fetching tournament data:', error);
+      setError(error.message || 'An error occurred while fetching tournament data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to create round robin groups
+  const createRoundRobinGroups = async (numGroups = null) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const data = numGroups ? { num_groups: numGroups } : {};
+      const response = await axios.post(
+        `${API_BASE_URL}/create_tournament_groups.php?tournament_id=${tournamentId}`,
+        data
+      );
+      
+      if (response.data.success) {
+        // Fetch the newly created groups
+        fetchTournamentGroups();
+      } else {
+        throw new Error(response.data.message || 'Failed to create groups');
+      }
+    } catch (error) {
+      console.error('Error creating groups:', error);
+      setError(error.message || 'An error occurred while creating groups');
+      setLoading(false);
+    }
+  };
+
+  // Function to save match result
+  const handleSaveResult = async (updatedResult) => {
+    console.log(updatedResult)
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/update_match_result.php?match_id=${updatedResult.matchIndex}`,
+        {
+          team1_score: updatedResult.team1Score,
+          team2_score: updatedResult.team2Score
+        }
+      );
+      
+      if (response.data.success) {
+        // Refresh the tournament data to get updated standings
+        fetchTournamentGroups();
+        return true;
+      } else {
+        console.error('Error updating match result:', response.data);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error updating match result:', error);
+      return false;
+    }
+  };
+
+  // Function to create playoffs
+  const createPlayoffs = async () => {
+    setPlayoffLoading(true);
+    
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/create_tournament_playoffs.php?tournament_id=${tournamentId}`
+      );
+      
+      if (response.data.success) {
+        setPlayoffData(response.data.data);
+        setActiveTab('playoffs'); // Switch to playoffs tab
+        return true;
+      } else {
+        throw new Error(response.data.message || 'Failed to create playoffs');
+      }
+    } catch (error) {
+      console.error('Error creating playoffs:', error);
+      setError(error.message || 'An error occurred while creating playoffs');
+      return false;
+    } finally {
+      setPlayoffLoading(false);
+    }
+  };
+
+  // Function to fetch playoff data
+  const fetchPlayoffs = async () => {
+    if (activeTab !== 'playoffs') return;
+    
+    setPlayoffLoading(true);
+    
+    try {
+      const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/get_tournament_playoffs.php?tournament_id=${tournamentId}`
+      );
+      
+      if (response.data.success) {
+        setPlayoffData(response.data.data);
+      } else {
+        setPlayoffData(null); // No playoffs yet
+      }
+    } catch (error) {
+      console.error('Error fetching playoffs:', error);
+      setPlayoffData(null);
+    } finally {
+      setPlayoffLoading(false);
+    }
+  };
+
+  // Fetch playoffs when switching to playoffs tab
+  useEffect(() => {
+    if (activeTab === 'playoffs') {
+      fetchPlayoffs();
+    }
+  }, [activeTab]);
+
+  // Handle opening the modal
+  const handleOpenModal = (groupIndex) => {
+    setModalGroupIndex(groupIndex);
+    setIsModalOpen(true);
+  };
+
+  // Check if all matches are complete to enable playoff creation
+  const areAllMatchesCompleted = () => {
+    if (!groups.length) return false;
+    
+    for (const group of groups) {
+      for (const roundKey in group.matches) {
+        const round = group.matches[roundKey];
+        for (const match of round) {
+          if (match.status !== 'completed') {
+            return false;
+          }
+        }
+      }
     }
     
-    return b.goalsFor - a.goalsFor;
-  });
+    return true;
+  };
 
-  const FormIndicator = ({ result }) => {
-    if (result === 'W') {
-      return <div className="w-5 h-5 rounded-full bg-green-600 flex items-center justify-center text-xs text-white font-bold">W</div>;
-    } else if (result === 'D') {
-      return <div className="w-5 h-5 rounded-full bg-gray-500 flex items-center justify-center text-xs text-white font-bold">D</div>;
-    } else {
-      return <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center text-xs text-white font-bold">L</div>;
+  // Get the current group's data
+  const currentGroup = groups[selectedGroup] || { name: '', teams: [], matches: [], standings: [] };
+
+  // Get current round matches for the selected group
+  const currentRoundMatches = currentGroup.matches && currentGroup.matches[currentRound] 
+    ? currentGroup.matches[currentRound] 
+    : [];
+
+  // Total number of rounds in the current group
+  const totalRounds = currentGroup.matches ? Object.keys(currentGroup.matches).length : 0;
+
+  // Render loading state
+  if (loading && !groups.length) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center text-white">
+        <div className="text-center">
+          <FaSpinner className="animate-spin text-4xl text-primary mx-auto mb-4" />
+          <p className="text-xl">Loading tournament data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Render error state
+  if (error && !groups.length) {
+    return (
+      <div className="min-h-screen w-full text-white">
+        <div className="bg-red-900/30 border border-red-500 rounded-lg p-4 mb-6">
+          <h2 className="text-xl font-bold mb-2">Error</h2>
+          <p>{error}</p>
+        </div>
+        
+        <button
+          onClick={() => createRoundRobinGroups()}
+          className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-orange-600 transition-colors"
+        >
+          Create Round Robin Groups
+        </button>
+      </div>
+    );
+  }
+
+  // Render functions for different tab contents
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'groups':
+        return (
+          <GroupsOverview
+            groups={groups}
+            selectedGroup={selectedGroup}
+            setSelectedGroup={setSelectedGroup}
+            onOpenModal={handleOpenModal}
+          />
+        );
+      case 'playoffs':
+        if (playoffLoading) {
+          return (
+            <div className="min-h-[400px] flex items-center justify-center">
+              <FaSpinner className="animate-spin text-4xl text-primary mx-auto" />
+              <p className="ml-3 text-lg">Loading playoff bracket...</p>
+            </div>
+          );
+        }
+        
+        if (!playoffData || !playoffData.has_playoffs) {
+          return (
+            <div className="min-h-[400px] flex flex-col items-center justify-center">
+              <p className="text-xl mb-6">No playoff bracket has been created yet.</p>
+              <button
+                onClick={createPlayoffs}
+                disabled={!areAllMatchesCompleted()}
+                className={`px-6 py-3 rounded-lg ${
+                  areAllMatchesCompleted() 
+                    ? 'bg-primary text-white hover:bg-orange-600' 
+                    : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                } transition-colors`}
+              >
+                Create Playoff Bracket
+              </button>
+              {!areAllMatchesCompleted() && (
+                <p className="text-sm text-gray-400 mt-3">
+                  All group matches must be completed before creating playoffs
+                </p>
+              )}
+            </div>
+          );
+        }
+        
+        return <PlayoffsBracket bracketData={playoffData.bracket} />;
+      default:
+        return <GroupsOverview groups={groups} />;
     }
   };
 
   return (
-    <div className="min-h-screen   p-4 md:p-6 text-white">
-      <h1 className="text-3xl font-bold mb-8 text-start">Tournament Bracket</h1>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 ">
-        {/* Standings Table */}
-        <div className="lg:col-span-2">
-          <h2 className="text-xl font-bold mb-4 flex items-center">
-            <Trophy className="mr-2 text-yellow-500" size={20} />
-            Tournament Standings
-          </h2>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-800 text-gray-300">
-                  <th className="py-3 px-4 text-left">Pos</th>
-                  <th className="py-3 px-4 text-left">Team</th>
-                  <th className="py-3 px-4 text-center">P</th>
-                  <th className="py-3 px-4 text-center">W</th>
-                  <th className="py-3 px-4 text-center">D</th>
-                  <th className="py-3 px-4 text-center">L</th>
-                  <th className="py-3 px-4 text-center">GF</th>
-                  <th className="py-3 px-4 text-center">GA</th>
-                  <th className="py-3 px-4 text-center">GD</th>
-                  <th className="py-3 px-4 text-center">Pts</th>
-                  <th className="py-3 px-4 text-center">Form</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700">
-                {sortedTeams.map((team, index) => (
-                  <tr 
-                    key={team.id} 
-                    className={`
-                      ${index === 0 ? 'bg-blue-900/20' : ''}
-                      ${index === 1 ? 'bg-green-900/20' : ''}
-                      ${index === 2 ? 'bg-yellow-900/20' : ''}
-                      hover:bg-gray-800 transition-colors
-                    `}
-                  >
-                    <td className="py-3 px-4 font-medium">
-                      <div className="flex items-center">
-                        {index === 0 && <Trophy size={16} className="mr-1 text-yellow-500" />}
-                        {index === 1 && <Medal size={16} className="mr-1 text-gray-300" />}
-                        {index === 2 && <Medal size={16} className="mr-1 text-yellow-700" />}
-                        {index + 1}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 font-medium text-cyan-400">{team.name}</td>
-                    <td className="py-3 px-4 text-center">{team.played}</td>
-                    <td className="py-3 px-4 text-center text-green-500">{team.wins}</td>
-                    <td className="py-3 px-4 text-center text-gray-400">{team.draws}</td>
-                    <td className="py-3 px-4 text-center text-red-500">{team.losses}</td>
-                    <td className="py-3 px-4 text-center">{team.goalsFor}</td>
-                    <td className="py-3 px-4 text-center">{team.goalsAgainst}</td>
-                    <td className="py-3 px-4 text-center">
-                      <div className="flex items-center justify-center">
-                        {team.goalsFor - team.goalsAgainst > 0 ? (
-                          <>
-                            <span className="text-green-500">+{team.goalsFor - team.goalsAgainst}</span>
-                            <ArrowUpRight size={14} className="ml-1 text-green-500" />
-                          </>
-                        ) : team.goalsFor - team.goalsAgainst < 0 ? (
-                          <>
-                            <span className="text-red-500">{team.goalsFor - team.goalsAgainst}</span>
-                            <ArrowDownRight size={14} className="ml-1 text-red-500" />
-                          </>
-                        ) : (
-                          <>
-                            <span>0</span>
-                            <Minus size={14} className="ml-1" />
-                          </>
-                        )}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-center font-bold">{team.wins * 3 + team.draws}</td>
-                    <td className="py-3 px-4">
-                      <div className="flex space-x-1">
-                        {team.form.slice(-5).map((result, i) => (
-                          <FormIndicator key={i} result={result} />
-                        ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          
-          <div className="mt-4 text-sm text-gray-400 space-y-1">
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-blue-900/40 mr-2"></div>
-              <span>Tournament Winner</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-green-900/40 mr-2"></div>
-              <span>Qualification Position</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-yellow-900/40 mr-2"></div>
-              <span>Playoff Position</span>
-            </div>
-          </div>
+    <div className="min-h-screen w-full text-white">
+      {/* Tournament Header */}
+       <div>
+                <h1 className="text-4xl flex items-center font-custom tracking-wider uppercase">
+                  Tournament Bracket
+                </h1>
+                <div className="flex items-center text-primary">
+                  <TbTournament />
+                  <p className="mx-2">
+                  Teams divided into groups for round robin matches                  </p>
+                </div>
+              </div>
+
+      {/* Tabs Navigation */}
+      <div className="mb-6 border-b border-gray-800">
+        <div className="flex justify-center overflow-x-auto py-2 space-x-2">
+          <TabButton
+            active={activeTab === 'groups'}
+            onClick={() => setActiveTab('groups')}
+            icon={<FaUserFriends className="mr-2" />}
+            label="Groups Stage"
+          />
+          <TabButton
+            active={activeTab === 'playoffs'}
+            onClick={() => setActiveTab('playoffs')}
+            icon={<FaTrophy className="mr-2" />}
+            label="Playoffs"
+          />
         </div>
-        
-      
       </div>
+
+      {/* Tab Content */}
+      <div className="mt-6">{renderTabContent()}</div>
+      
+     
     </div>
   );
 };
 
-export default RoundRobinTournament;
+// Tab Button Component
+const TabButton = ({ active, onClick, icon, label }) => (
+  <button
+    onClick={onClick}
+    className={`px-6 py-3 font-bold tracking-wider angular-cut flex items-center relative overflow-hidden group ${active
+        ? 'text-primary'
+        : 'text-white hover:text-primary'
+      }`}
+    style={{
+      clipPath: "polygon(0 0, 95% 0, 100% 100%, 5% 100%)",
+      minWidth: "200px",
+      transition: "all 0.3s ease-in-out"
+    }}
+    aria-pressed={active}
+    aria-label={label}
+  >
+    {/* Background with transition */}
+    <div
+      className={`absolute inset-0 bg-dark z-0 transition-all duration-300 ease-in-out ${active ? 'border border-primary' : 'border border-transparent'
+        }`}
+      style={{
+        clipPath: "polygon(0 0, 95% 0, 100% 100%, 5% 100%)"
+      }}
+    />
+
+    {/* Hover effect overlay */}
+    <div
+      className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-20 z-0 transition-opacity duration-300 ease-in-out"
+      style={{
+        clipPath: "polygon(0 0, 95% 0, 100% 100%, 5% 100%)"
+      }}
+    />
+
+    {/* Content with z-index to appear above backgrounds */}
+    <div className="flex items-center z-10 relative transition-all duration-300">
+      <span className={`mr-2 transition-transform duration-300 ${active ? 'scale-110' : 'group-hover:scale-105'}`}>
+        {icon}
+      </span>
+      <span className="transition-all duration-300 ease-in-out">{label}</span>
+    </div>
+  </button>
+);
+
+// Groups Overview Component
+const GroupsOverview = ({ groups, selectedGroup, setSelectedGroup, onOpenModal }) => {
+  // Function to sort teams by wins in descending order
+  const sortedGroups = groups.map(group => {
+    if (group.standings) {
+      // Create a copy of standings to avoid mutating the original data
+      const sortedStandings = [...group.standings].sort((a, b) => {
+        // Sort by wins in descending order
+        return (b.wins || 0) - (a.wins || 0);
+      });
+      
+      // Return a new group object with sorted standings
+      return {
+        ...group,
+        standings: sortedStandings
+      };
+    }
+    return group;
+  });
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+      {sortedGroups.length === 0 ? (
+        <div className="col-span-2 text-center py-10">
+          <p className="text-xl mb-4">No groups have been created yet.</p>
+          <p className="text-gray-400">Create groups to start the tournament.</p>
+        </div>
+      ) : (
+        sortedGroups.map((group, index) => (
+          <div
+            key={group.id}
+            className={`relative overflow-hidden cursor-pointer transition-all duration-300 ${
+              selectedGroup === index ? 'border-primary' : ''
+            }`}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent selecting the group
+              onOpenModal(index);
+            }}
+          >
+            {/* Background gradient overlay */}
+            <div className="absolute inset-0 z-0">
+              <div
+                className="absolute inset-0 rounded"
+                style={{
+                  background: 'linear-gradient(135deg, #090808 0%, #090808 100%)'
+                }}
+              ></div>
+            </div>
+
+            {/* Group Card Content */}
+            <div className="p-4 flex flex-col relative z-1 0 ">
+              <h3 className="text-2xl font-custom tracking-widest mb-4 flex items-center">
+                <span className={`text-primary mr-2 ${selectedGroup === index ? 'scale-110' : ''}`}>
+                  <FaUserFriends />
+                </span>
+                {group.name}
+              </h3> 
+
+              <div className="space-y-4">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="text-xs text-gray-400 uppercase">
+                    <th className="py-2 w-10 text-center"></th>
+
+                      <th className="py-2 w-10 text-center"></th>
+                      <th className="py-2 text-left">Team</th>
+                      <th className="py-2 w-12 text-center">
+                        <span className="flex items-center justify-center gap-1">
+                          <FaFire size={10} className="text-green-400" /> W
+                        </span>
+                      </th>
+                      <th className="py-2 w-12 text-center">
+                        <span className="flex items-center justify-center gap-1">
+                          <FaEquals size={10} className="text-yellow-400" /> D
+                        </span>
+                      </th>
+                      <th className="py-2 w-12 text-center">
+                        <span className="flex items-center justify-center gap-1">
+                          <FaSkull size={10} className="text-red-400" /> L
+                        </span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y-4 divide-secondary">
+                    {group.standings && group.standings.map((team, teamIndex) => (
+                      <tr
+                        key={team.team_id || teamIndex}
+                        className="relative hover:bg-gray-800/50  transition-all duration-300"
+                      >
+                        {/* Background image container */}
+                        <td colSpan={5} className="absolute inset-0 m-0 p-0 border-none">
+                          <div className="absolute inset-0 z-0">
+                            {/* Team logo or background image */}
+                            {team.team_logo && (
+                              <div
+                                className="absolute inset-0"
+                                style={{
+                                  backgroundImage: `url(${process.env.NEXT_PUBLIC_BACKEND_URL}${team.team_logo})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'right center',
+                                  opacity: 0.2,
+                                }}
+                              ></div>
+                            )}
+
+                            {/* Fade gradient overlay - Different for top positions */}
+                            <div
+                              className="absolute inset-0"
+                              style={{
+                                background:
+                                  teamIndex === 0
+                                    ? 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.0) 40%, black 70%), linear-gradient(to top, transparent 50%, rgba(255,215,0,0.1) 100%)'
+                                    : teamIndex === 1
+                                      ? 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.0) 40%, black 70%), linear-gradient(to top, transparent 50%, rgba(192,192,192,0.1) 100%)'
+                                      : 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.0) 40%, black 70%)',
+                              }}
+                            ></div>
+                          </div>
+                        </td>
+
+                        {/* Rank Cell */}
+                        <td className="py-2 text-center relative z-10 align-middle">
+                          <span
+                            className={`
+                              inline-flex items-center justify-center w-3 h-3 rounded-full 
+                              ${teamIndex === 0 ? 'text-yellow-300' : ''}
+                              ${teamIndex === 1 ? 'text-gray-300' : ''}
+                              ${teamIndex > 1 ? 'text-gray-400' : ''}
+                              font-bold text-sm
+                            `}
+                          >
+                            {teamIndex + 1}
+                          </span>
+                        </td>
+
+                        {/* Team Name */}
+                        <td className="py-2 text-left relative z-10 pl-2 align-middle">
+                          <div className="flex items-center">
+                            <span
+                              className={`font-valorant hover:text-primary transition-all duration-300 relative group text-sm ${
+                                teamIndex < 2 ? 'text-white ' : 'text-white'
+                              }`}
+                            >
+                              {team.team_name}
+                              <span className="absolute -bottom-1 font-base left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* Wins */}
+                        <td className="py-2 text-center relative z-10 align-middle">
+                          <div className="transition-all text-sm font-free-fire text-green-400 duration-300 hover:font-bold">
+                            {team.wins || 0}
+                          </div>
+                        </td>
+
+                        {/* Draws */}
+                        <td className="py-2 text-center relative z-10 align-middle">
+                          <div className="transition-all text-sm font-free-fire text-yellow-400 duration-300 hover:font-bold">
+                            {team.draws || 0}
+                          </div>
+                        </td>
+
+                        {/* Losses */}
+                        <td className="py-2 text-center relative z-10 align-middle">
+                          <div className="transition-all text-sm font-free-fire text-red-400 duration-300 hover:font-bold">
+                            {team.losses || 0}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
+};
+
+export default MultiGroupRoundRobinTournament;

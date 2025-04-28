@@ -77,7 +77,7 @@ const TabComponent = ({ activeTab, onTabChange, tournament }) => {
                     {/* Background Game Image Layer */}
                     <div className="absolute inset-0 z-0">
                       <img
-                        src={'https://i.ytimg.com/vi/HA29W7J8dQE/maxresdefault.jpg'}
+                        src={`${tournament.game_image}`}
                         alt={tournament.game_name || 'Tournament Game'}
                         className="w-full h-full object-cover"
                         onError={(e) => {

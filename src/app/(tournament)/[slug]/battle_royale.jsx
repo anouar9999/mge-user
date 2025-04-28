@@ -15,125 +15,6 @@ import {
 import { Plus, Search, Trophy, X } from 'lucide-react';
 import axios from 'axios';
 
-// Fake data for development and testing
-const FAKE_DATA = {
-  teams: [
-    {
-      team_id: 1,
-      team_name: "Apex Predators",
-      matches_played: 5,
-      total_kills: 42,
-      total_placement_points: 35,
-      total_points: 77,
-      team_image: "/images/teams/team1.jpg"
-    },
-    {
-      team_id: 2,
-      team_name: "Shadow Wolves",
-      matches_played: 5,
-      total_kills: 38,
-      total_placement_points: 30,
-      total_points: 68,
-      team_image: "/images/teams/team2.jpg"
-    },
-    {
-      team_id: 3,
-      team_name: "Phoenix Rising",
-      matches_played: 5,
-      total_kills: 35,
-      total_placement_points: 28,
-      total_points: 63,
-      team_image: "/images/teams/team3.jpg"
-    },
-    {
-      team_id: 4,
-      team_name: "Midnight Raiders",
-      matches_played: 5,
-      total_kills: 30,
-      total_placement_points: 25,
-      total_points: 55,
-      team_image: "/images/teams/team4.jpg"
-    },
-    {
-      team_id: 5,
-      team_name: "Viper Squad",
-      matches_played: 5,
-      total_kills: 28,
-      total_placement_points: 22,
-      total_points: 50,
-      team_image: "/images/teams/team5.jpg"
-    },
-    {
-      team_id: 6,
-      team_name: "Crimson Elite",
-      matches_played: 5,
-      total_kills: 25,
-      total_placement_points: 20,
-      total_points: 45,
-      team_image: "/images/teams/team6.jpg"
-    },
-    {
-      team_id: 7,
-      team_name: "Omega Force",
-      matches_played: 5,
-      total_kills: 22,
-      total_placement_points: 18,
-      total_points: 40,
-      team_image: "/images/teams/team7.jpg"
-    },
-    {
-      team_id: 8,
-      team_name: "Stealth Assassins",
-      matches_played: 5,
-      total_kills: 20,
-      total_placement_points: 15,
-      total_points: 35,
-      team_image: "/images/teams/team8.jpg"
-    },
-    {
-      team_id: 9,
-      team_name: "Thunder Legion",
-      matches_played: 5,
-      total_kills: 18,
-      total_placement_points: 12,
-      total_points: 30,
-      team_image: "/images/teams/team9.jpg"
-    },
-    {
-      team_id: 10,
-      team_name: "Frost Giants",
-      matches_played: 5,
-      total_kills: 15,
-      total_placement_points: 10,
-      total_points: 25,
-      team_image: "/images/teams/team10.jpg"
-    }
-  ],
-  tournament: {
-    id: 123,
-    name: "Battle Royale Championship 2023",
-    description: "The ultimate test of skill and strategy",
-    start_date: "2023-10-15",
-    end_date: "2023-10-20",
-    status: "active"
-  },
-  settings: {
-    kill_points: 1,
-    placement_points: {
-      1: 12,
-      2: 9,
-      3: 7,
-      4: 5,
-      5: 4,
-      6: 3,
-      7: 2,
-      8: 1
-    },
-    max_teams: 20,
-    matches_per_day: 5
-  }
-};
-
 const BattleRoyale = ({ tournamentId }) => {
 
   // State variables
@@ -163,20 +44,6 @@ const BattleRoyale = ({ tournamentId }) => {
     const fetchLeaderboardData = async () => {
       try {
         setLoading(true);
-        
-        // For development, use fake data instead of API call
-        const useFakeData = true; // Toggle this for testing
-        
-        if (useFakeData) {
-          // Simulate API delay
-          setTimeout(() => {
-            setTeams(FAKE_DATA.teams);
-            setTournamentInfo(FAKE_DATA.tournament);
-            setSettings(FAKE_DATA.settings);
-            setLoading(false);
-          }, 1000);
-          return;
-        }
         
         // Real API call for production
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
@@ -226,20 +93,18 @@ const BattleRoyale = ({ tournamentId }) => {
       setEditingTeam(null);
       setShowEditModal(false);
 
-
-
     } catch (err) {
       console.error('Error updating team stats:', err);
       alert('Failed to update team stats. Please try again.');
     }
   };
   // Filter teams based on search term
-  const filteredTeams = teams.filter(
+  const filteredTeams = teams ? teams.filter(
     (team) =>
       team.team_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       team.team_id?.toString().includes(searchTerm) ||
       team.total_points?.toString().includes(searchTerm),
-  );
+  ) : [];
 
   // Handle edit click
   const handleEditClick = (team) => {
@@ -255,6 +120,11 @@ const BattleRoyale = ({ tournamentId }) => {
   // Initialize match results form
   const initializeNewMatch = () => {
     // Use teams data from the leaderboard
+    if (!teams || teams.length === 0) {
+      alert('No teams available to add match results');
+      return;
+    }
+    
     const initialResults = teams.map(team => ({
       team_id: team.team_id,
       team_name: team.team_name,
@@ -346,19 +216,12 @@ const BattleRoyale = ({ tournamentId }) => {
           <div className="flex items-center text-primary">
             <TbTournament />
             <p className="mx-2">
-              {tournamentInfo ? tournamentInfo.name : 'Tournament'} standings and statistics
+          standings and statistics
             </p>
           </div>
         </div>
 
-        {/* Admin toggle button */}
-        <button 
-          onClick={() => setIsAdminModalOpen(true)}
-          className="bg-primary text-white py-2 px-4 angular-cut hover:bg-primary/90 transition-all duration-300 flex items-center"
-        >
-          <FaEdit className="mr-2" />
-          Manage Leaderboard
-        </button>
+       
       </div>
     </div>
   );
@@ -840,99 +703,110 @@ const BattleRoyale = ({ tournamentId }) => {
         <tr className="h-2 bg-transparent"></tr>
 
         <tbody className="divide-y-8 divide-gray-800/30">
-          {teams.slice(0, 10).map((team, index) => (
-            <tr key={team.team_id} className="angular-cut hover:bg-gray-800/30 cursor-pointer relative">
-              {/* Background image container */}
-              <td colSpan={6} className="absolute inset-0 m-0 p-0 border-none">
-                <div className="absolute inset-0 z-0">
-                  {/* Team logo or background image */}
+          {teams && teams.length > 0 ? (
+            teams.slice(0, 10).map((team, index) => (
+              <tr key={team.team_id} className="angular-cut hover:bg-gray-800/30 cursor-pointer relative">
+                {/* Background image container */}
+                <td colSpan={6} className="absolute inset-0 m-0 p-0 border-none">
+                  <div className="absolute inset-0 z-0">
+                    {/* Team logo or background image */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage: team.team_image ? `url(${process.env.NEXT_PUBLIC_BACKEND_URL}${team.team_image})` : '',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'left center',
+                        opacity: 0.5,
+                      }}
+                    ></div>
+
+                    {/* Fade gradient overlay - Different for top 3 with gold, silver, bronze */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          index === 0
+                            ? 'linear-gradient(to right, transparent 0%,rgba(255,215,0,0.0) 20%, rgba(255,215,0,0.5) 40%, rgba(218,165,32,1) 70%)' // Gold gradient for 1st
+                            : index === 1
+                              ? 'linear-gradient(to right, transparent 0%, rgba(192,192,192,0.3) 40%, rgba(169,169,169,0.6) 70%)' // Silver gradient for 2nd
+                              : index === 2
+                                ? 'linear-gradient(to right, transparent 0%, rgba(205,127,50,0.3) 40%, rgba(184,115,51,0.6) 70%)' // Bronze gradient for 3rd
+                                : 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.7) 40%, black 70%)', // Original dark gradient for others
+                      }}
+                    ></div>
+                  </div>
+                </td>
+
+                {/* Rest of the row content */}
+                <td className="py-4 w-1/12 text-center font-custom relative z-10 align-middle">
                   <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage: team.team_image ? `url(${process.env.NEXT_PUBLIC_BACKEND_URL}${team.team_image})` : '',
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'left center',
-                      opacity: 0.5,
-                    }}
-                  ></div>
-
-                  {/* Fade gradient overlay - Different for top 3 with gold, silver, bronze */}
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        index === 0
-                          ? 'linear-gradient(to right, transparent 0%,rgba(255,215,0,0.0) 20%, rgba(255,215,0,0.5) 40%, rgba(218,165,32,1) 70%)' // Gold gradient for 1st
-                          : index === 1
-                            ? 'linear-gradient(to right, transparent 0%, rgba(192,192,192,0.3) 40%, rgba(169,169,169,0.6) 70%)' // Silver gradient for 2nd
-                            : index === 2
-                              ? 'linear-gradient(to right, transparent 0%, rgba(205,127,50,0.3) 40%, rgba(184,115,51,0.6) 70%)' // Bronze gradient for 3rd
-                              : 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.7) 40%, black 70%)', // Original dark gradient for others
-                    }}
-                  ></div>
-                </div>
-              </td>
-
-              {/* Rank Cell */}
-              <td className="py-4 w-1/12 text-center font-custom relative z-10 align-middle">
-                <div
-                  className={`inline-block w-8 h-8 rounded-full ${index === 0
-                    ? 'bg-gradient-to-r from-yellow-300 to-yellow-600' // Gold for 1st
-                    : index === 1
-                      ? 'bg-gradient-to-r from-gray-300 to-gray-500' // Silver for 2nd
-                      : index === 2
-                        ? 'bg-gradient-to-r from-amber-600 to-amber-800' // Bronze for 3rd
-                        : 'bg-gradient-to-r from-yellow-400 to-yellow-600' // Default yellow
-                    } text-black font-bold flex items-center justify-center`}
-                >
-                  {index + 1}
-                </div>
-              </td>
-
-              {/* Team Name Cell */}
-              <td className="py-4 w-3/12 text-left relative z-10 pl-2 align-middle">
-                <span
-                  className={`font-valorant hover:text-primary transition-all duration-300 relative group ${index < 3 ? 'text-white font-bold' : 'text-white'
+                    className={`inline-block w-8 h-8 rounded-full ${
+                      index === 0
+                        ? 'bg-gradient-to-r from-yellow-300 to-yellow-600' // Gold for 1st
+                        : index === 1
+                          ? 'bg-gradient-to-r from-gray-300 to-gray-500' // Silver for 2nd
+                          : index === 2
+                            ? 'bg-gradient-to-r from-amber-600 to-amber-800' // Bronze for 3rd
+                            : 'bg-gradient-to-r from-yellow-400 to-yellow-600' // Default yellow
+                      } text-black font-bold flex items-center justify-center`}
+                  >
+                    {index + 1}
+                  </div>
+                </td>
+                
+                {/* Team Name Cell */}
+                <td className="py-4 w-3/12 text-left relative z-10 pl-2 align-middle">
+                  <span
+                    className={`font-valorant hover:text-primary transition-all duration-300 relative group ${
+                      index < 3 ? 'text-white font-bold' : 'text-white'
                     }`}
-                >
-                  {team.team_name}
-                  <span className="absolute -bottom-1 font-base left-0 w-0 h-0.5 bg-primtext-primary group-hover:w-full transition-all duration-300"></span>
-                </span>
-              </td>
+                  >
+                    {team.team_name}
+                    <span className="absolute -bottom-1 font-base left-0 w-0 h-0.5 bg-primtext-primary group-hover:w-full transition-all duration-300"></span>
+                  </span>
+                </td>
 
-              {/* Matches Played Cell */}
-              <td className="py-4 w-1/12 text-center relative z-10 align-middle">
-                <div className="transition-all font-base duration-300 hover:font-bold">
-                  {team.matches_played}
-                </div>
-              </td>
+                {/* Matches Played Cell */}
+                <td className="py-4 w-1/12 text-center relative z-10 align-middle">
+                  <div className="transition-all font-base duration-300 hover:font-bold">
+                    {team.matches_played}
+                  </div>
+                </td>
 
-              {/* Kill Points Cell */}
-              <td className="py-4 w-2/12 text-center relative z-10 align-middle">
-                <div className="transition-all font-base duration-300 hover:font-bold">
-                  {team.total_kills}
-                </div>
-              </td>
+                {/* Kill Points Cell */}
+                <td className="py-4 w-2/12 text-center relative z-10 align-middle">
+                  <div className="transition-all font-base duration-300 hover:font-bold">
+                    {team.total_kills}
+                  </div>
+                </td>
 
-              {/* Placement Points Cell */}
-              <td className="py-4 w-2/12 text-center relative z-10 align-middle">
-                <div className="transition-all font-base duration-300 hover:font-bold">
-                  {team.total_placement_points}
-                </div>
-              </td>
+                {/* Placement Points Cell */}
+                <td className="py-4 w-2/12 text-center relative z-10 align-middle">
+                  <div className="transition-all font-base duration-300 hover:font-bold">
+                    {team.total_placement_points}
+                  </div>
+                </td>
 
-              {/* Total Points Cell */}
-              <td className="py-4 w-1/6 text-center relative z-10 align-middle">
-                <div
-                  className={`transition-all duration-300 ${index < 3 ? 'text-white text-xl font-free-fire' : 'text-primary font-free-fire'
+                {/* Total Points Cell */}
+                <td className="py-4 w-1/6 text-center relative z-10 align-middle">
+                  <div
+                    className={`transition-all duration-300 ${
+                      index < 3 ? 'text-white text-xl font-free-fire' : 'text-primary font-free-fire'
                     } text-lg hover:font-bold`}
-                >
-                  {team.total_points}
-                  <span className="ml-2  font-normal">pts</span>
-                </div>
+                  >
+                    {team.total_points}
+                    <span className="ml-2 font-normal">pts</span>
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" className="py-8 text-center text-gray-400">
+                {loading ? "Loading teams..." : "No teams available"}
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
